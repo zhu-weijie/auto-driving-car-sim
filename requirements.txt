@@ -1,0 +1,7 @@
+# Testing
+pytest==8.4.1
+pytest-cov==6.2.1
+
+# Linting and Formatting
+ruff==0.12.3
+black==25.1.0

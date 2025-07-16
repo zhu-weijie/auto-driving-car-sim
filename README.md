@@ -1,2 +1,4 @@
-# auto-driving-car-sim
-🧮A simulation program for an autonomous driving car.
+# Auto Driving Car Simulation
+
+A simulation program for an autonomous driving car.
+
