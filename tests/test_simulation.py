@@ -11,11 +11,14 @@ def test_simulation_run_single_car_success():
     commands = "FFRFFFFRRL"
 
     simulation = Simulation(field, [car], [commands])
-    simulation.run()
+    result = simulation.run()
+    assert result["status"] == "OK"
+    assert len(result["cars"]) == 1
 
-    assert car.x == 5
-    assert car.y == 4
-    assert car.direction == "S"
+    final_car_state = result["cars"][0]
+    assert final_car_state["x"] == 5
+    assert final_car_state["y"] == 4
+    assert final_car_state["direction"] == "S"
 
 
 @pytest.mark.parametrize(
@@ -36,10 +39,14 @@ def test_simulation_car_stops_at_boundary(
     car = Car(name="A", x=start_x, y=start_y, direction=direction)
 
     simulation = Simulation(field, [car], [commands])
-    simulation.run()
+    result = simulation.run()
 
-    assert car.x == expected_x
-    assert car.y == expected_y
+    assert result["status"] == "OK"
+    assert len(result["cars"]) == 1
+
+    final_car_state = result["cars"][0]
+    assert final_car_state["x"] == expected_x
+    assert final_car_state["y"] == expected_y
 
 
 def test_simulation_run_two_cars_success():
@@ -50,10 +57,15 @@ def test_simulation_run_two_cars_success():
     commands_B = "LFLFLF"
 
     simulation = Simulation(field, [car_A, car_B], [commands_A, commands_B])
-    simulation.run()
+    result = simulation.run()
 
-    assert car_A.x == 1 and car_A.y == 1 and car_A.direction == "W"
-    assert car_B.x == 8 and car_B.y == 8 and car_B.direction == "N"
+    assert result["status"] == "OK"
+    assert len(result["cars"]) == 2
+
+    final_car_A_state = result["cars"][0]
+    assert final_car_A_state["x"] == 1
+    assert final_car_A_state["y"] == 1
+    assert final_car_A_state["direction"] == "W"
 
 
 def test_simulation_run_cars_with_different_command_lengths():
@@ -64,7 +76,17 @@ def test_simulation_run_cars_with_different_command_lengths():
     commands_B = "RFFL"
 
     simulation = Simulation(field, [car_A, car_B], [commands_A, commands_B])
-    simulation.run()
+    result = simulation.run()
 
-    assert car_A.x == 0 and car_A.y == 2 and car_A.direction == "N"
-    assert car_B.x == 5 and car_B.y == 3 and car_B.direction == "E"
+    assert result["status"] == "OK"
+    assert len(result["cars"]) == 2
+
+    final_car_A_state = result["cars"][0]
+    assert final_car_A_state["x"] == 0
+    assert final_car_A_state["y"] == 2
+    assert final_car_A_state["direction"] == "N"
+
+    final_car_B_state = result["cars"][1]
+    assert final_car_B_state["x"] == 5
+    assert final_car_B_state["y"] == 3
+    assert final_car_B_state["direction"] == "E"
