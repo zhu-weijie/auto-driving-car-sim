@@ -40,3 +40,31 @@ def test_simulation_car_stops_at_boundary(
 
     assert car.x == expected_x
     assert car.y == expected_y
+
+
+def test_simulation_run_two_cars_success():
+    field = Field(10, 10)
+    car_A = Car(name="A", x=1, y=2, direction="N")
+    commands_A = "RFRFRF"
+    car_B = Car(name="B", x=7, y=8, direction="W")
+    commands_B = "LFLFLF"
+
+    simulation = Simulation(field, [car_A, car_B], [commands_A, commands_B])
+    simulation.run()
+
+    assert car_A.x == 1 and car_A.y == 1 and car_A.direction == "W"
+    assert car_B.x == 8 and car_B.y == 8 and car_B.direction == "N"
+
+
+def test_simulation_run_cars_with_different_command_lengths():
+    field = Field(10, 10)
+    car_A = Car(name="A", x=0, y=0, direction="N")
+    commands_A = "FF"
+    car_B = Car(name="B", x=5, y=5, direction="E")
+    commands_B = "RFFL"
+
+    simulation = Simulation(field, [car_A, car_B], [commands_A, commands_B])
+    simulation.run()
+
+    assert car_A.x == 0 and car_A.y == 2 and car_A.direction == "N"
+    assert car_B.x == 5 and car_B.y == 3 and car_B.direction == "E"
