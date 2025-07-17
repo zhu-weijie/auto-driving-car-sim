@@ -16,9 +16,9 @@ def test_simulation_run_single_car_success():
     assert len(result["cars"]) == 1
 
     final_car_state = result["cars"][0]
-    assert final_car_state["x"] == 5
-    assert final_car_state["y"] == 4
-    assert final_car_state["direction"] == "S"
+    assert final_car_state.x == 5
+    assert final_car_state.y == 4
+    assert final_car_state.direction == "S"
 
 
 @pytest.mark.parametrize(
@@ -45,8 +45,8 @@ def test_simulation_car_stops_at_boundary(
     assert len(result["cars"]) == 1
 
     final_car_state = result["cars"][0]
-    assert final_car_state["x"] == expected_x
-    assert final_car_state["y"] == expected_y
+    assert final_car_state.x == expected_x
+    assert final_car_state.y == expected_y
 
 
 def test_simulation_run_two_cars_success():
@@ -63,9 +63,9 @@ def test_simulation_run_two_cars_success():
     assert len(result["cars"]) == 2
 
     final_car_A_state = result["cars"][0]
-    assert final_car_A_state["x"] == 1
-    assert final_car_A_state["y"] == 1
-    assert final_car_A_state["direction"] == "W"
+    assert final_car_A_state.x == 1
+    assert final_car_A_state.y == 1
+    assert final_car_A_state.direction == "W"
 
 
 def test_simulation_run_cars_with_different_command_lengths():
@@ -82,11 +82,11 @@ def test_simulation_run_cars_with_different_command_lengths():
     assert len(result["cars"]) == 2
 
     final_car_A_state = result["cars"][0]
-    assert final_car_A_state["x"] == 0
-    assert final_car_A_state["y"] == 2
-    assert final_car_A_state["direction"] == "N"
+    assert final_car_A_state.x == 0
+    assert final_car_A_state.y == 2
+    assert final_car_A_state.direction == "N"
 
     final_car_B_state = result["cars"][1]
-    assert final_car_B_state["x"] == 5
-    assert final_car_B_state["y"] == 3
-    assert final_car_B_state["direction"] == "E"
+    assert final_car_B_state.x == 5
+    assert final_car_B_state.y == 3
+    assert final_car_B_state.direction == "E"
