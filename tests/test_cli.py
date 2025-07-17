@@ -37,7 +37,7 @@ def test_cli_ask_for_field_dimensions_reprompts_on_invalid(mock_print, mock_inpu
 @patch("app.cli.CLI._add_car")
 @patch("builtins.input", side_effect=["1", "2"])
 def test_cli_main_menu_calls_correct_methods(
-    mock_add_car, mock_run_simulation, mock_input, capsys
+    mock_input, mock_add_car, mock_run_simulation, capsys
 ):
     cli = CLI()
     cli.field = Field(10, 10)
