@@ -1,3 +1,4 @@
+from app.car import Car
 from app.field import Field
 
 
@@ -30,8 +31,65 @@ class CLI:
                     "by a space."
                 )
 
+    def _ask_for_car_name(self) -> str:
+        while True:
+            name = input("Please enter the name of the car: ")
+            if not name:
+                print("Car name cannot be empty.")
+            elif name in [car.name for car in self.cars]:
+                print(f"Car with name '{name}' already exists.")
+            else:
+                return name
+
+    def _ask_for_car_position(self, car_name: str) -> tuple[int, int, str]:
+        prompt = (
+            f"Please enter initial position of car {car_name} in x y Direction format: "
+        )
+        while True:
+            raw = input(prompt)
+            parts = raw.split()
+            try:
+                if len(parts) != 3:
+                    raise ValueError("Invalid format.")
+
+                x, y = int(parts[0]), int(parts[1])
+                direction = parts[2].upper()
+
+                if direction not in Car.VALID_DIRECTIONS:
+                    raise ValueError("Invalid format.")
+                if not self.field.is_within_bounds(x, y):
+                    raise ValueError("Position is outside the field boundaries.")
+
+                return x, y, direction
+            except ValueError as e:
+                print(e)
+
+    def _ask_for_car_commands(self, car_name: str) -> str:
+        prompt = f"Please enter the commands for car {car_name}: "
+        while True:
+            commands = input(prompt).upper()
+            if all(c in "FLR" for c in commands):
+                return commands
+            else:
+                print("Commands can only contain 'F', 'L', 'R'.")
+
+    def _display_car_list(self):
+        print("\nYour current list of cars are:")
+        for i, car in enumerate(self.cars):
+            print(
+                f"- {car.name}, ({car.x},{car.y}) {car.direction}, {self.commands[i]}"
+            )
+
     def _add_car(self):
-        pass
+        name = self._ask_for_car_name()
+        x, y, direction = self._ask_for_car_position(name)
+        commands = self._ask_for_car_commands(name)
+
+        new_car = Car(name=name, x=x, y=y, direction=direction)
+        self.cars.append(new_car)
+        self.commands.append(commands)
+
+        self._display_car_list()
 
     def _run_simulation(self):
         return "STOP"
