@@ -21,3 +21,23 @@ def test_car_representation():
     car = Car(name="C", x=5, y=8, direction="W")
     expected_repr = "Car(name=C, x=5, y=8, direction=W)"
     assert repr(car) == expected_repr
+
+
+@pytest.mark.parametrize(
+    "initial_direction, expected_direction",
+    [("N", "W"), ("W", "S"), ("S", "E"), ("E", "N")],
+)
+def test_car_turn_left(initial_direction, expected_direction):
+    car = Car(name="A", x=0, y=0, direction=initial_direction)
+    car.turn_left()
+    assert car.direction == expected_direction
+
+
+@pytest.mark.parametrize(
+    "initial_direction, expected_direction",
+    [("N", "E"), ("E", "S"), ("S", "W"), ("W", "N")],
+)
+def test_car_turn_right(initial_direction, expected_direction):
+    car = Car(name="A", x=0, y=0, direction=initial_direction)
+    car.turn_right()
+    assert car.direction == expected_direction

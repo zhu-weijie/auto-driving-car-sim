@@ -10,6 +10,12 @@ class Car:
         self.y = y
         self.direction = direction
 
+    def turn_left(self):
+        pass
+
+    def turn_right(self):
+        pass
+
     def __repr__(self) -> str:
         return (
             f"Car(name={self.name}, x={self.x}, y={self.y}, direction={self.direction})"
