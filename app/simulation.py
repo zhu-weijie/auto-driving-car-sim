@@ -8,9 +8,9 @@ class Simulation:
         self.cars = cars
         self.commands = commands
 
-    def run(self):
+    def run(self) -> dict:
         if not self.cars:
-            return
+            return {"status": "OK", "cars": []}
 
         max_steps = max(len(cmd) for cmd in self.commands) if self.commands else 0
 
@@ -28,3 +28,5 @@ class Simulation:
                         if self.field.is_within_bounds(next_x, next_y):
                             car.x = next_x
                             car.y = next_y
+
+        return {"status": "OK", "cars": self.cars}
