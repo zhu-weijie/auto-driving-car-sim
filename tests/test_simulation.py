@@ -19,25 +19,24 @@ def test_simulation_run_single_car_success():
 
 
 @pytest.mark.parametrize(
-    "start_x, start_y, direction, commands",
+    "start_x, start_y, direction, commands, expected_x, expected_y",
     [
-        (0, 0, "S", "F"),
-        (0, 0, "W", "F"),
-        (9, 9, "N", "FF"),
-        (9, 9, "E", "RFFF"),
+        (0, 0, "S", "F", 0, 0),
+        (0, 0, "W", "F", 0, 0),
+        (9, 9, "N", "F", 9, 9),
+        (9, 9, "E", "F", 9, 9),
+        (5, 9, "N", "FF", 5, 9),
+        (9, 5, "E", "FF", 9, 5),
     ],
 )
-def test_simulation_car_stops_at_boundary(start_x, start_y, direction, commands):
+def test_simulation_car_stops_at_boundary(
+    start_x, start_y, direction, commands, expected_x, expected_y
+):
     field = Field(10, 10)
     car = Car(name="A", x=start_x, y=start_y, direction=direction)
-    initial_pos = (car.x, car.y)
 
     simulation = Simulation(field, [car], [commands])
     simulation.run()
 
-    if direction == "S" or direction == "W":
-        assert (car.x, car.y) == initial_pos
-    elif direction == "N":
-        assert (car.x, car.y) == (9, 9)
-    elif direction == "E":
-        assert (car.x, car.y) == (9, 9)
+    assert car.x == expected_x
+    assert car.y == expected_y
