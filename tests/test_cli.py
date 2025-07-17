@@ -1,5 +1,6 @@
 from unittest.mock import patch
 
+from app.car import Car
 from app.cli import CLI
 from app.field import Field
 
@@ -117,3 +118,49 @@ def test_cli_add_car_handles_all_invalid_inputs(mock_input, capsys):
     assert "Position is outside the field boundaries." in captured.out
     assert "Invalid format." in captured.out
     assert "Commands can only contain 'F', 'L', 'R'." in captured.out
+
+
+@patch("builtins.input", return_value="1")
+@patch("app.simulation.Simulation.run")
+def test_cli_run_simulation_success_scenario(mock_run, mock_input, capsys):
+    cli = CLI()
+    cli.field = Field(10, 10)
+    car_A = Car("A", 1, 2, "N")
+    final_car_A = Car("A", 5, 4, "S")
+    cli.cars = [car_A]
+    cli.commands = ["FFR..."]
+
+    mock_run.return_value = {"status": "OK", "cars": [final_car_A]}
+
+    cli._run_simulation()
+
+    captured = capsys.readouterr()
+    assert "- A, (1,2) N, FFR..." in captured.out
+    assert "After simulation, the result is:" in captured.out
+    assert "- A, (5,4) S" in captured.out
+    assert "[1] Start over" in captured.out
+
+
+@patch("builtins.input", return_value="2")
+@patch("app.simulation.Simulation.run")
+def test_cli_run_simulation_collision_scenario(mock_run, mock_input, capsys):
+    cli = CLI()
+    cli.field = Field(10, 10)
+    cli.cars = [Car("A", 0, 0, "N"), Car("B", 0, 2, "S")]
+    cli.commands = ["F", "F"]
+
+    collided_car_A = Car("A", 0, 1, "N")
+    collided_car_B = Car("B", 0, 1, "S")
+    mock_run.return_value = {
+        "status": "COLLISION",
+        "step": 1,
+        "location": (0, 1),
+        "cars": [collided_car_A, collided_car_B],
+    }
+
+    cli._run_simulation()
+
+    captured = capsys.readouterr()
+    assert "After simulation, the result is:" in captured.out
+    assert "- A, collides with B at (0,1) at step 1" in captured.out
+    assert "- B, collides with A at (0,1) at step 1" in captured.out
