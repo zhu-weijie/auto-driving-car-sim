@@ -1,6 +1,5 @@
-def get_greeting():
-    return "Welcome to Auto Driving Car Simulation!"
-
+from app.cli import CLI
 
 if __name__ == "__main__":
-    print(get_greeting())
+    cli = CLI()
+    cli.start()
