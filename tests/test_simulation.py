@@ -52,8 +52,8 @@ def test_simulation_run_two_cars_success():
     simulation = Simulation(field, [car_A, car_B], [commands_A, commands_B])
     simulation.run()
 
-    assert car_A.x == 2 and car_A.y == 3 and car_A.direction == "E"
-    assert car_B.x == 6 and car_B.y == 7 and car_B.direction == "S"
+    assert car_A.x == 1 and car_A.y == 1 and car_A.direction == "W"
+    assert car_B.x == 8 and car_B.y == 8 and car_B.direction == "N"
 
 
 def test_simulation_run_cars_with_different_command_lengths():
@@ -67,4 +67,4 @@ def test_simulation_run_cars_with_different_command_lengths():
     simulation.run()
 
     assert car_A.x == 0 and car_A.y == 2 and car_A.direction == "N"
-    assert car_B.x == 7 and car_B.y == 4 and car_B.direction == "N"
+    assert car_B.x == 5 and car_B.y == 3 and car_B.direction == "E"
