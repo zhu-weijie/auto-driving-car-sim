@@ -65,3 +65,55 @@ def test_cli_main_menu_reprompts_on_invalid_input(mock_add_car, mock_input, caps
 
     captured = capsys.readouterr()
     assert "Invalid option. Please choose 1 or 2." in captured.out
+
+
+@patch("builtins.input", side_effect=["A", "1 2 N", "FFR"])
+def test_cli_add_car_happy_path(mock_input, capsys):
+    cli = CLI()
+    cli.field = Field(10, 10)
+
+    cli._add_car()
+
+    assert len(cli.cars) == 1
+    assert len(cli.commands) == 1
+
+    car = cli.cars[0]
+    assert car.name == "A"
+    assert car.x == 1
+    assert car.y == 2
+    assert car.direction == "N"
+    assert cli.commands[0] == "FFR"
+
+    captured = capsys.readouterr()
+    assert "Your current list of cars are:" in captured.out
+    assert "- A, (1,2) N, FFR" in captured.out
+
+
+@patch(
+    "builtins.input",
+    side_effect=[
+        "B",
+        "10 10 N",
+        "5 5 Z",
+        "5 5 E",
+        "LFRX",
+        "LFR",
+    ],
+)
+def test_cli_add_car_handles_all_invalid_inputs(mock_input, capsys):
+    cli = CLI()
+    cli.field = Field(10, 10)
+
+    cli._add_car()
+
+    assert len(cli.cars) == 1
+    assert cli.cars[0].name == "B"
+    assert cli.cars[0].x == 5
+    assert cli.cars[0].y == 5
+    assert cli.cars[0].direction == "E"
+    assert cli.commands[0] == "LFR"
+
+    captured = capsys.readouterr()
+    assert "Position is outside the field boundaries." in captured.out
+    assert "Invalid format." in captured.out
+    assert "Commands can only contain 'F', 'L', 'R'." in captured.out
