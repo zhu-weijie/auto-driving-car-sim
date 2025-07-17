@@ -27,3 +27,12 @@ def test_field_initialization():
 def test_is_within_bounds(width, height, x, y, expected):
     field = Field(width, height)
     assert field.is_within_bounds(x, y) == expected
+
+
+def test_field_invalid_initialization():
+    with pytest.raises(ValueError):
+        Field(0, 10)
+    with pytest.raises(ValueError):
+        Field(10, 0)
+    with pytest.raises(ValueError):
+        Field(-5, 10)
