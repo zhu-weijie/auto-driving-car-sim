@@ -90,3 +90,22 @@ def test_simulation_run_cars_with_different_command_lengths():
     assert final_car_B_state.x == 5
     assert final_car_B_state.y == 3
     assert final_car_B_state.direction == "E"
+
+
+def test_simulation_detects_head_on_collision():
+    field = Field(10, 10)
+    car_A = Car(name="A", x=5, y=3, direction="N")
+    commands_A = "F"
+    car_B = Car(name="B", x=5, y=5, direction="S")
+    commands_B = "F"
+
+    simulation = Simulation(field, [car_A, car_B], [commands_A, commands_B])
+    result = simulation.run()
+
+    assert result["status"] == "COLLISION"
+    assert result["step"] == 1
+    assert result["location"] == (5, 4)
+
+    assert len(result["cars"]) == 2
+    collided_car_names = {car.name for car in result["cars"]}
+    assert collided_car_names == {"A", "B"}
