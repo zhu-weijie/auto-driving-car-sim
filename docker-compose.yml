@@ -3,3 +3,5 @@ services:
     build: .
     volumes:
       - .:/usr/src/app
+    stdin_open: true
+    tty: true
