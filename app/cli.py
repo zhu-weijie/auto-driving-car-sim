@@ -1,5 +1,6 @@
 from app.car import Car
 from app.field import Field
+from app.simulation import Simulation
 
 
 class CLI:
@@ -91,8 +92,46 @@ class CLI:
 
         self._display_car_list()
 
+    def _display_simulation_result(self, result: dict):
+        print("\nAfter simulation, the result is:")
+        if result["status"] == "OK":
+            for car in result["cars"]:
+                print(f"- {car.name}, ({car.x},{car.y}) {car.direction}")
+        elif result["status"] == "COLLISION":
+            collided_cars = result["cars"]
+            for car in collided_cars:
+                other_name = next(c.name for c in collided_cars if c.name != car.name)
+                print(
+                    f"- {car.name}, collides with {other_name} at "
+                    f"{result['location']} at step {result['step']}"
+                )
+
+    def _show_end_menu(self) -> str:
+        print("\nPlease choose from the following options:")
+        print("[1] Start over")
+        print("[2] Exit")
+        while True:
+            choice = input("> ")
+            if choice == "1":
+                return "START_OVER"
+            elif choice == "2":
+                return "EXIT"
+            else:
+                print("Invalid option. Please choose 1 or 2.")
+
     def _run_simulation(self):
-        return "STOP"
+        if not self.cars:
+            print("\nThere are no cars to simulate.")
+            return "CONTINUE"
+
+        self._display_car_list()
+
+        simulation = Simulation(self.field, self.cars, self.commands)
+        result = simulation.run()
+
+        self._display_simulation_result(result)
+
+        return self._show_end_menu()
 
     def _show_main_menu(self):
         print("\nPlease choose from the following options:")
@@ -103,17 +142,25 @@ class CLI:
             choice = input("> ")
             if choice == "1":
                 self._add_car()
-                return None
+                return "CONTINUE"
             elif choice == "2":
-                return self._run_simulation()
+                return "RUN_SIMULATION"
             else:
                 print("Invalid option. Please choose 1 or 2.")
 
     def start(self):
-        print("Welcome to Auto Driving Car Simulation!")
-        self.field = self._ask_for_field_dimensions()
-
         while True:
-            result = self._show_main_menu()
-            if result == "STOP":
+            print("Welcome to Auto Driving Car Simulation!")
+            self.field = self._ask_for_field_dimensions()
+            self.cars = []
+            self.commands = []
+
+            while True:
+                choice = self._show_main_menu()
+                if choice == "RUN_SIMULATION":
+                    final_action = self._run_simulation()
+                    break
+
+            if final_action == "EXIT":
+                print("\nThank you for running the simulation. Goodbye!")
                 break
