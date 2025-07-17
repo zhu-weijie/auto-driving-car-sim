@@ -1,5 +1,6 @@
 class Car:
     VALID_DIRECTIONS = {"N", "E", "S", "W"}
+    _DIRECTIONS_SEQUENCE = ["N", "E", "S", "W"]
 
     def __init__(self, name: str, x: int, y: int, direction: str):
         if direction not in self.VALID_DIRECTIONS:
@@ -11,10 +12,14 @@ class Car:
         self.direction = direction
 
     def turn_left(self):
-        pass
+        current_index = self._DIRECTIONS_SEQUENCE.index(self.direction)
+        new_index = (current_index - 1) % 4
+        self.direction = self._DIRECTIONS_SEQUENCE[new_index]
 
     def turn_right(self):
-        pass
+        current_index = self._DIRECTIONS_SEQUENCE.index(self.direction)
+        new_index = (current_index + 1) % 4
+        self.direction = self._DIRECTIONS_SEQUENCE[new_index]
 
     def __repr__(self) -> str:
         return (
