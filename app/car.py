@@ -21,6 +21,9 @@ class Car:
         new_index = (current_index + 1) % 4
         self.direction = self._DIRECTIONS_SEQUENCE[new_index]
 
+    def calculate_forward_position(self) -> tuple[int, int]:
+        pass
+
     def __repr__(self) -> str:
         return (
             f"Car(name={self.name}, x={self.x}, y={self.y}, direction={self.direction})"

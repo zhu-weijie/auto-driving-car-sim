@@ -41,3 +41,19 @@ def test_car_turn_right(initial_direction, expected_direction):
     car = Car(name="A", x=0, y=0, direction=initial_direction)
     car.turn_right()
     assert car.direction == expected_direction
+
+
+@pytest.mark.parametrize(
+    "initial_direction, initial_pos, expected_pos",
+    [
+        ("N", (5, 5), (5, 6)),
+        ("E", (5, 5), (6, 5)),
+        ("S", (5, 5), (5, 4)),
+        ("W", (5, 5), (4, 5)),
+        ("N", (0, 0), (0, 1)),
+    ],
+)
+def test_calculate_forward_position(initial_direction, initial_pos, expected_pos):
+    car = Car(name="A", x=initial_pos[0], y=initial_pos[1], direction=initial_direction)
+    calculated_pos = car.calculate_forward_position()
+    assert calculated_pos == expected_pos
