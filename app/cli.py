@@ -4,6 +4,8 @@ from app.field import Field
 class CLI:
     def __init__(self):
         self.field = None
+        self.cars = []
+        self.commands = []
 
     def _ask_for_field_dimensions(self) -> Field:
         while True:
@@ -28,6 +30,32 @@ class CLI:
                     "by a space."
                 )
 
+    def _add_car(self):
+        pass
+
+    def _run_simulation(self):
+        return "STOP"
+
+    def _show_main_menu(self):
+        print("\nPlease choose from the following options:")
+        print("[1] Add a car to field")
+        print("[2] Run simulation")
+
+        while True:
+            choice = input("> ")
+            if choice == "1":
+                self._add_car()
+                return None
+            elif choice == "2":
+                return self._run_simulation()
+            else:
+                print("Invalid option. Please choose 1 or 2.")
+
     def start(self):
         print("Welcome to Auto Driving Car Simulation!")
         self.field = self._ask_for_field_dimensions()
+
+        while True:
+            result = self._show_main_menu()
+            if result == "STOP":
+                break
